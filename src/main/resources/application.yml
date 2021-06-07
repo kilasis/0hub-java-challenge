@@ -1,0 +1,16 @@
+grpc:
+  server:
+    port: ${GRPC_PORT:7080}
+
+spring:
+  application:
+    name: ChallengeApplication
+  main:
+    banner-mode: off
+
+logging:
+  level:
+    root: warn
+    pro.utorg: debug
+  pattern:
+    console: '%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %file:%line %msg%n'

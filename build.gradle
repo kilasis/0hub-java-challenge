@@ -1,0 +1,82 @@
+plugins {
+  id 'java'
+  id 'application'
+  id 'org.springframework.boot' version '2.3.11.RELEASE'
+  id 'io.freefair.lombok' version '5.3.3.3'
+  id 'com.google.protobuf' version '0.8.16'
+}
+
+group = 'com.zerohub.challenge'
+mainClassName = 'com.zerohub.challenge.ChallengeApplication'
+
+java {
+  targetCompatibility = sourceCompatibility = JavaVersion.VERSION_13
+}
+
+repositories {
+  mavenCentral()
+  mavenLocal()
+}
+
+configurations {
+  compileOnly {
+    extendsFrom annotationProcessor
+  }
+}
+
+sourceSets {
+  main {
+    java {
+      srcDirs 'build/generated/source/proto/main/grpc'
+      srcDirs 'build/generated/source/proto/main/java'
+    }
+  }
+}
+
+protobuf {
+  protoc {
+    artifact = "com.google.protobuf:protoc:3.17.2"
+  }
+
+  plugins {
+    grpc {
+      artifact = "io.grpc:protoc-gen-grpc-java:1.38.0"
+    }
+  }
+
+  generateProtoTasks {
+    all()*.plugins {
+      grpc {}
+    }
+  }
+}
+
+test {
+  useJUnitPlatform {}
+}
+
+dependencies {
+  // Import BOMs
+  implementation platform("org.springframework.boot:spring-boot-dependencies:2.3.11.RELEASE")
+
+  // Spring
+  implementation 'org.springframework.boot:spring-boot-starter'
+
+  // gRPC
+  implementation "com.google.protobuf:protobuf-java:3.17.2"
+  implementation 'net.devh:grpc-server-spring-boot-starter:2.12.0.RELEASE'
+
+  // Annotations
+  compileOnly 'org.projectlombok:lombok'
+  compileOnly 'javax.annotation:javax.annotation-api'
+
+  // Test
+  testImplementation 'org.junit.jupiter:junit-jupiter-api'
+  testImplementation 'org.junit.jupiter:junit-jupiter-engine'
+  testImplementation 'org.mockito:mockito-junit-jupiter'
+  testImplementation('org.springframework.boot:spring-boot-starter-test') {
+    exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+  }
+  testImplementation 'io.grpc:grpc-testing:1.38.0'
+  testImplementation 'net.devh:grpc-client-spring-boot-starter:2.12.0.RELEASE'
+}

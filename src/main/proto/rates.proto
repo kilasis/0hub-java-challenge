@@ -1,0 +1,28 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+option java_package = "com.zerohub.challenge.proto";
+option java_outer_classname = "Rates";
+
+import "google/protobuf/empty.proto";
+
+message PublishRequest {
+  string baseCurrency = 1;
+  string quoteCurrency = 2;
+  string price = 3;
+}
+
+message ConvertRequest {
+  string fromCurrency = 1;
+  string fromAmount = 3;
+  string toCurrency = 2;
+}
+
+message ConvertResponse {
+  string price = 1;
+}
+
+service RatesService {
+  rpc publish (PublishRequest) returns (google.protobuf.Empty) {}
+  rpc convert (ConvertRequest) returns (ConvertResponse) {}
+}
