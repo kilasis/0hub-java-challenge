@@ -27,12 +27,14 @@ public class ChallengeApplicationTest {
   private static final String UAH = "UAH";
   private static final String RUB = "RUB";
   private static final String LTC = "LTC";
+  private static final String AUD = "AUD";
 
   @BeforeEach
   public void setup() {
     var rates = List.of(
       toPublishRequest(new String[]{BTC, EUR, "50000.0000"}),
       toPublishRequest(new String[]{EUR, USD, "1.2000"}),
+      toPublishRequest(new String[]{EUR, AUD, "1.5000"}),
       toPublishRequest(new String[]{RUB, USD, "80.0000"}),
       toPublishRequest(new String[]{UAH, RUB, "4.0000"}),
       toPublishRequest(new String[]{LTC, BTC, "0.0400"}),
@@ -55,12 +57,12 @@ public class ChallengeApplicationTest {
   private static Stream<Arguments> testData() {
 
     return Stream.of(
-      Arguments.of("Same currency", toConvertRequest(new String[]{BTC, BTC, "0.9997"}), "1.0000"),
+      Arguments.of("Same currency", toConvertRequest(new String[]{BTC, BTC, "0.9997"}), "0.9997"),
       Arguments.of("Simple conversion", toConvertRequest(new String[]{EUR, BTC, "50000.0000"}), "1.0000"),
       Arguments.of("Reversed conversion", toConvertRequest(new String[]{BTC, EUR, "1.0000"}), "50000.0000"),
-      Arguments.of("Convert with one hop", toConvertRequest(new String[]{BTC, USD, "1.0000"}), "60000.0000"),
-      Arguments.of("Convert with two hops", toConvertRequest(new String[]{BTC, RUB, "1.0000"}), "4800000.0000"),
-      Arguments.of("Reversed conversion with two hops", toConvertRequest(new String[]{RUB, EUR, "4800000.0000"}), "1.0000")
+      Arguments.of("Convert with one hop", toConvertRequest(new String[]{BTC, AUD, "1.0000"}), "75000.0000"),
+      Arguments.of("Convert with two hops", toConvertRequest(new String[]{BTC, RUB, "1.0000"}), "4640000.0000"),
+      Arguments.of("Reversed conversion with two hops", toConvertRequest(new String[]{RUB, EUR, "96.0000"}), "1.0000")
     );
   }
 
